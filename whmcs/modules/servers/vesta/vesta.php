@@ -3,7 +3,7 @@
 // DomainScript by Nosov
 
 
-function vesta_ConfigOptions() {
+function vestacp_ConfigOptions() {
 
     $configarray = array(
      "Package Name" => array( "Type" => "text", "Default" => "default"),
@@ -15,7 +15,7 @@ function vesta_ConfigOptions() {
 
 }
 
-function vesta_CreateAccount($params) {
+function vestacp_CreateAccount($params) {
 
     // Execute only if there is assigned server
     if ($params["server"] == 1) {
@@ -45,7 +45,7 @@ function vesta_CreateAccount($params) {
         curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
         $answer = curl_exec($curl);
 
-		logModuleCall('vesta','CreateAccount_UserAccount','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
+        logModuleCall('vesta','CreateAccount_UserAccount','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
         // Enable ssh access
         if(($answer == 'OK') && ($params["configoption2"] == 'on')) {
@@ -72,9 +72,9 @@ function vesta_CreateAccount($params) {
 
         // Add domain
         if(($answer == 'OK') && (!empty($params["domain"]))) {
-	        
-	        vesta_DomainScript($params);
-	        
+
+            vestacp_DomainScript($params);
+
             $postvars = array(
               'user' => $params["serverusername"],
               'password' => $params["serverpassword"],
@@ -99,7 +99,7 @@ function vesta_CreateAccount($params) {
     }
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Hospedagem foi Gerada!";
     } else {
         $result = $answer;
     }
@@ -107,7 +107,7 @@ function vesta_CreateAccount($params) {
     return $result;
 }
 
-function vesta_TerminateAccount($params) {
+function vestacp_TerminateAccount($params) {
 
     // Execute only if there is assigned server
     if ($params["server"] == 1) {
@@ -133,10 +133,10 @@ function vesta_TerminateAccount($params) {
         $answer = curl_exec($curl);
     }
 
-	logModuleCall('vesta','TerminateAccount','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
+    logModuleCall('vesta','TerminateAccount','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Hospedagem Encerrada";
     } else {
         $result = $answer;
     }
@@ -144,7 +144,7 @@ function vesta_TerminateAccount($params) {
     return $result;
 }
 
-function vesta_SuspendAccount($params) {
+function vestacp_SuspendAccount($params) {
 
     // Execute only if there is assigned server
     if ($params["server"] == 1) {
@@ -173,7 +173,7 @@ function vesta_SuspendAccount($params) {
 	logModuleCall('vesta','SuspendAccount','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Hospedagem Suspensa";
     } else {
         $result = $answer;
     }
@@ -181,7 +181,7 @@ function vesta_SuspendAccount($params) {
     return $result;
 }
 
-function vesta_UnsuspendAccount($params) {
+function vestacp_UnsuspendAccount($params) {
 
     // Execute only if there is assigned server
     if ($params["server"] == 1) {
@@ -210,7 +210,7 @@ function vesta_UnsuspendAccount($params) {
     logModuleCall('vesta','UnsuspendAccount','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Hospedagem Reativada";
     } else {
         $result = $answer;
     }
@@ -218,7 +218,7 @@ function vesta_UnsuspendAccount($params) {
     return $result;
 }
 
-function vesta_ChangePassword($params) {
+function vestacp_ChangePassword($params) {
 
     // Execute only if there is assigned server
     if ($params["server"] == 1) {
@@ -248,15 +248,15 @@ function vesta_ChangePassword($params) {
 	logModuleCall('vesta','ChangePassword','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Senha de acesso a Hospedagem foi Modificada";
     } else {
         $result = $answer;
     }
-    
+
     return $result;
 }
 
-function vesta_ChangePackage($params) {
+function vestacp_ChangePackage($params) {
 
     // Execute only if there is assigned server
     if ($params["server"] == 1) {
@@ -286,7 +286,7 @@ function vesta_ChangePackage($params) {
 	logModuleCall('vesta','ChangePackage','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Plano da Hospedagem foi alterado";
     } else {
         $result = $answer;
     }
@@ -294,36 +294,36 @@ function vesta_ChangePackage($params) {
     return $result;
 }
 
-function vesta_ClientArea($params) {
+function vestacp_ClientArea($params) {
 
     $code = '<form action="https://'.$params["serverhostname"].':8083/login/" method="post" target="_blank">
 <input type="hidden" name="user" value="'.$params["username"].'" />
 <input type="hidden" name="password" value="'.$params["password"].'" />
 <input type="submit" value="Login to Control Panel" />
-<input type="button" value="Login to Webmail" onClick="window.open(\'http://'.$serverhostname.'/webmail\')" />
+<input type="button" value="Login to Webmail" onClick="window.open(\'http://'.$params["serverhostname"].'/webmail\')" />
 </form>';
     return $code;
 
 }
 
-function vesta_AdminLink($params) {
+function vestacp_AdminLink($params) {
 
     $code = '<form action="https://'.$params["serverhostname"].':8083/login/" method="post" target="_blank">
 <input type="hidden" name="user" value="'.$params["serverusername"].'" />
 <input type="hidden" name="password" value="'.$params["serverpassword"].'" />
-<input type="submit" value="Login to Control Panel" />
+<input type="submit" value="Acessar WHM" />
 </form>';
     return $code;
 
 }
 
-function vesta_LoginLink($params) {
+/*function vestacp_LoginLink($params) {
 
     echo "<a href=\"https://".$params["serverhostname"].":8083/login/\" target=\"_blank\" style=\"color:#cc0000\">control panel</a>";
 
-}
+}*/
 
-function vesta_UsageUpdate($params) {
+function vestacp_UsageUpdate($params) {
 
     // Prepare variables
     $postvars = array(
@@ -361,7 +361,7 @@ function vesta_UsageUpdate($params) {
 
 }
 
-function vesta_DomainScript($params) {
+function vestacp_DomainScript($params) {
 
     if ($params["server"] == 1&&!empty($params["configoption4"])) {
 
@@ -389,7 +389,7 @@ function vesta_DomainScript($params) {
     logModuleCall('vesta','DomainScript','https://'.$params["serverhostname"].':8083/api/'.$postdata,$answer);
 
     if($answer == 'OK') {
-        $result = "success";
+        $result = "Instalação realizada com sucesso!";
     } else {
         $result = $answer;
     }
